@@ -1,0 +1,25 @@
+STATIC VALIDATION SUMMARY
+=========================
+JavaScript syntax checks: PASS
+JSON file checks: PASS
+
+JavaScript files:
+src/app.js: PASS
+src/server.js: PASS
+src/repositories/user.repository.js: PASS
+src/services/auth.service.js: PASS
+src/routes/auth.routes.js: PASS
+src/routes/user.routes.js: PASS
+src/config/env.js: PASS
+src/models/User.js: PASS
+src/middleware/error-handler.js: PASS
+src/middleware/authenticate.js: PASS
+src/utils/http-error.js: PASS
+src/utils/validators.js: PASS
+test/auth.test.js: PASS
+
+JSON files:
+package.json: PASS
+postman/SDM-Week5-Authentication.postman_collection.json: PASS
+
+Runtime tests were not executed in this build environment because npm dependency installation did not complete. Run npm install, then npm test locally.

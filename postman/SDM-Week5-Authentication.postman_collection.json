@@ -1,0 +1,159 @@
+{
+  "info": {
+    "_postman_id": "2dfd54b9-0f1d-4d0f-8b88-67c05e9f6c21",
+    "name": "SDM Week 5 \u2014 Authentication API",
+    "description": "Signup, login, JWT-protected profile and negative authentication cases. Run signup then login; the login request stores the returned JWT in the collection variable accessToken.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1 \u2014 Health check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "2 \u2014 Signup",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Signup returns 201', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) { const body = pm.response.json(); pm.collectionVariables.set('accessToken', body.data.token); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Rahul Chauhan\",\n  \"email\": \"rahul.demo@example.com\",\n  \"password\": \"StrongPass123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/signup"
+      }
+    },
+    {
+      "name": "3 \u2014 Login (stores JWT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Login returns 200', () => pm.response.to.have.status(200));",
+              "if (pm.response.code === 200) { const body = pm.response.json(); pm.collectionVariables.set('accessToken', body.data.token); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"rahul.demo@example.com\",\n  \"password\": \"StrongPass123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/login"
+      }
+    },
+    {
+      "name": "4 \u2014 Protected profile (valid token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/users/me"
+      }
+    },
+    {
+      "name": "5 \u2014 Protected profile (missing token; expect 401)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/users/me"
+      }
+    },
+    {
+      "name": "6 \u2014 Login (wrong password; expect 401)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"rahul.demo@example.com\",\n  \"password\": \"WrongPassword123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/login"
+      }
+    },
+    {
+      "name": "7 \u2014 Duplicate signup (expect 409 after first signup)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Rahul Chauhan\",\n  \"email\": \"rahul.demo@example.com\",\n  \"password\": \"StrongPass123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/auth/signup"
+      }
+    }
+  ]
+}
